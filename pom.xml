@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.vericar</groupId>
+    <artifactId>tedora</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>VERICAR Tedora Project</name>
+    <organization>
+        <name>Verificacion y Certificacion Automotriz del Peru SRL</name>
+    </organization>
+    <packaging>jar</packaging>
+    <description>
+        This desktop application allows to generate SUNAT PLE txt files for
+        sales and purchases. Including the operations with no-domiciled (foreign)
+        persons.
+    </description>
+    <licenses>
+        <license>
+            <name>GPLv3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+    </licenses>
+    <inceptionYear>2021</inceptionYear>
+    <properties>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+    </properties>
+
+</project>
