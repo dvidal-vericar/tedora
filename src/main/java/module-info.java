@@ -5,4 +5,8 @@
  */
 module tedora {
 
+    //Google cloud.
+    requires google.cloud.firestore;
+
+    //
 }

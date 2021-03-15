@@ -28,6 +28,10 @@ import java.util.Objects;
  */
 public class XRate {
     /**
+     * The google cloud id.
+     */
+    private String id;
+    /**
      * The date in which this xRate is effective.
      */
     private LocalDate date;
@@ -92,6 +96,24 @@ public class XRate {
      */
     public void setSale(BigDecimal sale) {
         this.sale = sale;
+    }
+
+    /**
+     * Public accessor - getter.
+     *
+     * @return value of {@link #id}
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Public accessor - setter.
+     *
+     * @param id value to set into {@link #id}.
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
