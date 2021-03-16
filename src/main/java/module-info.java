@@ -5,8 +5,10 @@
  */
 module tedora {
 
-    //Google cloud.
-    requires google.cloud.firestore;
+    //Jakarta JPA
+    requires jakarta.persistence;
+    requires eclipselink;
+    requires org.mariadb.jdbc;
 
     //
 }

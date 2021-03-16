@@ -1,65 +1,59 @@
 package org.vericar.tedora.model;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/**
- * This element represents a currency eXchange Rate.
- * Since this app is for taxation purposes in Peru, and
- * only manage a local currency (PEN) and a foreign currency (USD),
- * then the exchange rate currency is not significative for the app scope.
- * Also, peruvian taxation rules states two exchange rates, one is the
- * purchase rate and the other the sale rate. The purchase rates are used
- * when the company buys something; while the sale rate when the company
- * sells something. Those rates are periodically published by the SUNAT (taxation
- * authority) and the SBS (bank regulator). Those may be found in
- * <a href="https://e-consulta.sunat.gob.pe/cl-at-ittipcam/tcS01Alias">
- * SUNAT tipo de cambio</a> microsite.
- * <br>
- * Or, in the <a href="https://www.sbs.gob.pe/app/pp/seriesHistoricas2/paso1.aspx">
- * SBS statistical app.</a>
- * <p>
- * We have downloaded all the historical xrates from april 1st, 2019 and using LibreOffice calc
- * created all the records needed to fill the database in csv format. This file, may be found
- * in the "external" directory of the project, in the xrates.csv file.
- *
- * @version 1.0
- */
+@Entity
 public class XRate {
-    /**
-     * The google cloud id.
-     */
     private String id;
-    /**
-     * The date in which this xRate is effective.
-     */
-    private LocalDate date;
-    /**
-     * The purchase rate.
-     */
+    private LocalDate taxDate;
     private BigDecimal purchase;
-    /**
-     * The sale rate.
-     */
     private BigDecimal sale;
 
     /**
      * Public accessor - getter.
      *
-     * @return value of {@link #date}
+     * @return value of {@link #id}
      */
-    public LocalDate getDate() {
-        return date;
+    @Id
+    @Column(name = "id")
+    public String getId() {
+        return id;
     }
 
     /**
      * Public accessor - setter.
      *
-     * @param date value to set into {@link #date}
+     * @param id value to set into {@link #id}
      */
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Public accessor - getter.
+     *
+     * @return value of {@link #taxDate}
+     */
+    @Basic
+    @Column(name = "taxDate")
+    public LocalDate getTaxDate() {
+        return taxDate;
+    }
+
+    /**
+     * Public accessor - setter.
+     *
+     * @param taxDate value to set into {@link #taxDate}
+     */
+    public void setTaxDate(LocalDate taxDate) {
+        this.taxDate = taxDate;
     }
 
     /**
@@ -67,6 +61,8 @@ public class XRate {
      *
      * @return value of {@link #purchase}
      */
+    @Basic
+    @Column(name = "purchase")
     public BigDecimal getPurchase() {
         return purchase;
     }
@@ -85,6 +81,8 @@ public class XRate {
      *
      * @return value of {@link #sale}
      */
+    @Basic
+    @Column(name = "sale")
     public BigDecimal getSale() {
         return sale;
     }
@@ -98,28 +96,10 @@ public class XRate {
         this.sale = sale;
     }
 
-    /**
-     * Public accessor - getter.
-     *
-     * @return value of {@link #id}
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Public accessor - setter.
-     *
-     * @param id value to set into {@link #id}.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o instanceof XRate xRate) {
-            return Objects.equals(getDate(), xRate.getDate());
+            return Objects.equals(id, xRate.id) && Objects.equals(taxDate, xRate.taxDate) && Objects.equals(purchase, xRate.purchase) && Objects.equals(sale, xRate.sale);
         } else {
             return false;
         }
@@ -127,6 +107,6 @@ public class XRate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getDate());
+        return Objects.hash(id, taxDate, purchase, sale);
     }
 }
