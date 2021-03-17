@@ -10,5 +10,6 @@ module tedora {
     requires eclipselink;
     requires org.mariadb.jdbc;
 
-    //
+    //Reactor
+    requires reactor.core;
 }

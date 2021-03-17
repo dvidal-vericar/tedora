@@ -83,6 +83,8 @@ public class Purchase {
      */
     @Basic
     @Column(name = "dateIssue")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getDateIssue() {
         return dateIssue;
     }
@@ -103,6 +105,8 @@ public class Purchase {
      */
     @Basic
     @Column(name = "dateDue")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getDateDue() {
         return dateDue;
     }
@@ -483,6 +487,8 @@ public class Purchase {
      */
     @Basic
     @Column(name = "spotDate")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getSpotDate() {
         return spotDate;
     }

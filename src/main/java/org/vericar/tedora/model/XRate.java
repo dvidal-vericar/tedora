@@ -1,9 +1,6 @@
 package org.vericar.tedora.model;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,6 +40,8 @@ public class XRate {
      */
     @Basic
     @Column(name = "taxDate")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getTaxDate() {
         return taxDate;
     }

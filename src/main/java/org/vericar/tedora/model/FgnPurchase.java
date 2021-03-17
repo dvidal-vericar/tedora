@@ -26,7 +26,7 @@ public class FgnPurchase {
     private BigDecimal incomeTaxSc;
     private Currencies currency;
     private BigDecimal xrate;
-    private byte provision76;
+    private boolean provision76;
     private TaxPeriod period;
     private FolioType folioType;
     private Purchase taxFolio;
@@ -81,6 +81,8 @@ public class FgnPurchase {
      */
     @Basic
     @Column(name = "dateIssue")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getDateIssue() {
         return dateIssue;
     }
@@ -401,7 +403,7 @@ public class FgnPurchase {
      */
     @Basic
     @Column(name = "provision76")
-    public byte getProvision76() {
+    public boolean getProvision76() {
         return provision76;
     }
 
@@ -410,7 +412,7 @@ public class FgnPurchase {
      *
      * @param provision76 value to set into {@link #provision76}
      */
-    public void setProvision76(byte provision76) {
+    public void setProvision76(boolean provision76) {
         this.provision76 = provision76;
     }
 

@@ -15,19 +15,13 @@
                 <configuration>
                     <source>15</source>
                     <target>15</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
+                    <compilerArgs>--enable-preview
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <environmentVariables>
-                        <GOOGLE_APPLICATION_CREDENTIALS>
-                            /home/dvidal/Codebase/googlekeys/taxationdb-73e3f661108f.json
-                        </GOOGLE_APPLICATION_CREDENTIALS>
-                    </environmentVariables>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -49,9 +43,10 @@
     </licenses>
     <inceptionYear>2021</inceptionYear>
     <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
         <test.jupiter.version>5.8.0-M1</test.jupiter.version>
+        <project.reactor.version>3.4.4</project.reactor.version>
     </properties>
 
     <dependencies>
@@ -73,7 +68,12 @@
             <artifactId>eclipselink</artifactId>
             <version>3.0.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-core -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>${project.reactor.version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
@@ -87,6 +87,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${test.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-test -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <version>${project.reactor.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

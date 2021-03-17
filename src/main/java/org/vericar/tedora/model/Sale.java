@@ -78,6 +78,8 @@ public class Sale {
      */
     @Basic
     @Column(name = "dateIssue")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getDateIssue() {
         return dateIssue;
     }

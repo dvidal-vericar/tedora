@@ -1,9 +1,6 @@
 package org.vericar.tedora.model;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -86,6 +83,8 @@ public class TaxPeriod {
      */
     @Basic
     @Column(name = "open")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getOpen() {
         return open;
     }
@@ -106,6 +105,8 @@ public class TaxPeriod {
      */
     @Basic
     @Column(name = "close")
+    @Temporal(TemporalType.DATE)
+    @Convert(converter = LocalDateEclipse.class)
     public LocalDate getClose() {
         return close;
     }
