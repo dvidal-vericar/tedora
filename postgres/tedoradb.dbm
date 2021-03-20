@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.3" use-changelog="false" last-position="0,0" last-zoom="1" max-obj-count="12"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layer="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="xrate" layer="0" collapse-mode="1" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="20" y="20"/>
+	<column name="id" not-null="true">
+		<type name="char" length="36"/>
+	</column>
+	<column name="tax_date" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="purchase" not-null="true">
+		<type name="decimal" length="6" precision="3"/>
+	</column>
+	<column name="sale" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<constraint name="uq_xrate_dates" type="uq-constr" table="public.xrate">
+		<columns names="tax_date" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="xrate_pk" type="pk-constr" table="public.xrate">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="partner" layer="0" collapse-mode="1" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="140" y="260"/>
+	<column name="id" not-null="true">
+		<type name="char" length="36"/>
+	</column>
+	<column name="doi_num" not-null="true">
+		<type name="varchar" length="15"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="address">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="partner_pk" type="pk-constr" table="public.partner">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="country_tax" index="5"/>
+		<object name="doi_type" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="fk_country_tax" index="1"/>
+		<object name="fk_doi_type" index="0"/>
+	</customidxs>
+</table>
+
+<table name="doi_type" layer="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="520" y="0"/>
+	<column name="id" not-null="true">
+		<type name="char" length="1"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="purchase" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="sale" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="foreign" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="regex" not-null="true">
+		<type name="varchar" length="45"/>
+	</column>
+	<constraint name="doi_type_pk" type="pk-constr" table="public.doi_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•title•purchase•sale•foreign•regex⸣
+0•OTROS•FALSE•TRUE•TRUE•\p{Alnum}{1,15}⸣
+1•DNI•TRUE•TRUE•FALSE•\p{Digit}{8}⸣
+4•C. EXT.•FALSE•TRUE•TRUE•\p{Alnum}{1,12}⸣
+6•RUC•TRUE•TRUE•FALSE•\p{Digit}{11}⸣
+7•PAS•FALSE•TRUE•TRUE•\p{Alnum}{1,12}⸣
+A•CD•FALSE•TRUE•TRUE•\p{Digit}{15}]]>
+	</initial-data>
+</table>
+
+<relationship name="partner_has_doiType" type="rel1n" layer="0"
+	 src-col-pattern="{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#3b0da7"
+	 src-table="public.doi_type"
+	 dst-table="public.partner"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<table name="country_tax" layer="0" collapse-mode="1" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="640" y="200"/>
+	<column name="id" not-null="true">
+		<type name="char" length="4"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<constraint name="country_tax_pk" type="pk-constr" table="public.country_tax">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•name⸣
+9249•USA]]>
+	</initial-data>
+</table>
+
+<relationship name="partner_has_country" type="rel1n" layer="0"
+	 src-col-pattern="{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#8c4584"
+	 src-table="public.country_tax"
+	 dst-table="public.partner"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<table name="period_tax" layer="0" collapse-mode="1" max-obj-count="10" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="740" y="560"/>
+	<column name="id" not-null="true">
+		<type name="char" length="6"/>
+	</column>
+	<column name="year" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="month" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="date_open" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_close" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="close_flag" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="count_prch" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="count_sale" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="count_frgn" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="period_tax_pk" type="pk-constr" table="public.period_tax">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fgn_icm_type" layer="0" collapse-mode="1" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Foreign income type.]]></comment>
+	<position x="1300" y="120"/>
+	<column name="id" not-null="true">
+		<type name="char" length="2"/>
+	</column>
+	<column name="shortName" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<constraint name="fgn_icm_type_pk" type="pk-constr" table="public.fgn_icm_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•shortName⸣
+00•BIENES⸣
+18•SRV. DIGITALES]]>
+	</initial-data>
+</table>
+
+<table name="fgn_srvc_type" layer="0" collapse-mode="1" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Foreign service type.]]></comment>
+	<position x="1000" y="120"/>
+	<column name="id" not-null="true">
+		<type name="char" length="1"/>
+	</column>
+	<column name="description" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<constraint name="fgn_srvc_type_pk" type="pk-constr" table="public.fgn_srvc_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•description⸣
+1•EN EL PERU⸣
+2•MIXTO⸣
+3•EN EL EXTRANJERO]]>
+	</initial-data>
+</table>
+
+<usertype name="currencies" configuration="enumeration">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<enumeration values="PEN,USD"/>
+</usertype>
+
+<usertype name="operation_type" configuration="enumeration">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<enumeration values="SALE,PURCHASE"/>
+</usertype>
+
+<table name="folio_type" layer="0" collapse-mode="1" max-obj-count="12" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<appended-sql><![CDATA[INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('00','OTROS',TRUE,FALSE,FALSE,FALSE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',FALSE,'Alfanumérico hasta 20.');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('01','FACTURA',TRUE,TRUE,FALSE,FALSE,'(E001)|(F\\p{Alnum}{3})|\\p{Digit}{4}','\\p{Digit}{1,8}',TRUE,'E001 o FXXX o 4 dígitos.');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('02','HONORARIOS',TRUE,FALSE,FALSE,FALSE,'E001','\\p{Digit}{1,8}',FALSE,'E001');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('03','BOLETA',TRUE,TRUE,FALSE,FALSE,'(EB01)|(B\\p{Alnum}{3}|\\p{Digit}{4}','\\p{Digit}{1,8}',FALSE,'EB01 o BXXX o 4 dígitos');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('05','AEREO REGULAR',TRUE,FALSE,FALSE,FALSE,'[1-5]','\\p{Digit}{1,11}',FALSE,'1: Boleto Manual\n2: Boleto Automático\n3: Boleto Electrónico\n4: Otros\n5: Anulado');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('06','PORTE AEREO',TRUE,FALSE,FALSE,FALSE,'\\p{Digit}{4}','\\p{Digit}{1,8}',FALSE,'4 dígitos');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('07','N. CREDITO',TRUE,TRUE,FALSE,FALSE,'(E[0B]01)|([FB]\\p{Alnum}{3}|\\p{Digit}{4}','\\p{Digit}{1,8}',TRUE,'E001 o EB01 o BXXX o FXXX o 4 dígitos');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('08','N. DEBITO',TRUE,TRUE,FALSE,FALSE,'(E[0B]01)|([FB]\\p{Alnum}{3}|\\p{Digit}{4}','\\p{Digit}{1,8}',TRUE,'E001 o EB01 o BXXX o FXXX o 4 dígitos');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('12','TICKET',TRUE,FALSE,FALSE,FALSE,'\\p{Alnum}{1,20}','\\p{Digit}{1,20}',TRUE,'Hasta 20 alfanuméricos (obligatorio)');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('14','RECIBO',TRUE,FALSE,FALSE,TRUE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',TRUE,'Hasta 20 alfanuméricos (opcional)');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('15','TERRESTRE URBANO',TRUE,FALSE,FALSE,FALSE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',FALSE,'Hasta 20 alfanuméricos (opcional)');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('16','TERRESTRE NACIONAL',TRUE,FALSE,FALSE,FALSE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',FALSE,'Hasta 20 alfanuméricos (opcional)');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('46','PDT',TRUE,FALSE,FALSE,FALSE,'\\p{Digit}{4}','\\p{Digit}{1,20}',TRUE,'Código de PDT/Formulario');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('50','DUA',TRUE,FALSE,FALSE,FALSE,'\\p{Digit}{3}','\\p{Digit}{6}',TRUE,'Código de intendencia aduanera.');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('51','DUI',TRUE,FALSE,FALSE,FALSE,'\\p{Digit}{3}','\\p{Digit}{6}',TRUE,'Código de intendencia aduanera.');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('52','DSI',TRUE,FALSE,FALSE,FALSE,'\\p{Digit}{3}','\\p{Digit}{6}',TRUE,'Código de intendencia aduanera.');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('53','DMC',TRUE,FALSE,FALSE,FALSE,'\\p{Digit}{3}','\\p{Digit}{6}',TRUE,'Código de intendencia aduanera.');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('91','NO DOM',FALSE,FALSE,TRUE,FALSE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',FALSE,'Hasta 20 alfanuméricos (opcional)');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('97','N.C. NO DOM',FALSE,FALSE,TRUE,FALSE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',FALSE,'Hasta 20 alfanuméricos (opcional)');
+INSERT INTO public.folio_type ("id","title","purchase","sale","foreign","due_flag","regex_series","regex_number","tax_flag","serie_tooltip") VALUES ('98','N.D. NO DOM',FALSE,FALSE,TRUE,FALSE,'\\p{Alnum}{,20}','\\p{Alnum}{1,20}',FALSE,'Hasta 20 alfanuméricos (opcional)');
+]]></appended-sql>
+	<position x="940" y="860"/>
+	<column name="id" not-null="true">
+		<type name="char" length="2"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="purchase" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="sale" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="foreign" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="due_flag" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="regex_series" not-null="true">
+		<type name="varchar" length="45"/>
+	</column>
+	<column name="regex_number" not-null="true">
+		<type name="varchar" length="45"/>
+	</column>
+	<column name="tax_flag" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="serie_tooltip" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="folio_type_pk" type="pk-constr" table="public.folio_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="uq_partner_doi" type="uq-constr" table="public.partner">
+	<columns names="doi_type,doi_num" ref-type="src-columns"/>
+</constraint>
+
+<table name="folio_tax" layer="0" collapse-mode="1" max-obj-count="39" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="320" y="460"/>
+	<column name="id" not-null="true">
+		<type name="char" length="36"/>
+	</column>
+	<column name="operation" not-null="true">
+		<type name="public.operation_type" length="0"/>
+	</column>
+	<column name="correlative" not-null="true">
+		<type name="char" length="10"/>
+	</column>
+	<column name="period_tax" not-null="true">
+		<type name="char" length="6"/>
+	</column>
+	<column name="issuer" not-null="true">
+		<type name="char" length="36"/>
+	</column>
+	<column name="addressee" not-null="true">
+		<type name="char" length="36"/>
+	</column>
+	<column name="folio_type" not-null="true">
+		<type name="char" length="2"/>
+	</column>
+	<column name="folio_serie" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="folio_num" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="date_issue" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_due">
+		<type name="date" length="0"/>
+	</column>
+	<column name="briefing">
+		<type name="text" length="0"/>
+	</column>
+	<column name="modified">
+		<type name="char" length="36"/>
+	</column>
+	<column name="void_flag" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="currency" not-null="true">
+		<type name="public.currencies" length="0"/>
+	</column>
+	<column name="xrate" not-null="true">
+		<type name="decimal" length="6" precision="3"/>
+	</column>
+	<column name="price_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="price_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="disc_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="disc_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="disc_tax_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="disc_tax_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_free_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_free_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_icbp_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_icbp_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="oth_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="oth_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="total_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="total_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="frgn_flag" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<constraint name="folio_tax_pk" type="pk-constr" table="public.folio_tax">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="uq_folio_correlative" type="uq-constr" table="public.folio_tax">
+		<columns names="operation,period_tax,correlative" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="uq_folio_number" type="uq-constr" table="public.folio_tax">
+		<columns names="issuer,folio_type,folio_serie,folio_num" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="foreign_prch" layer="0" collapse-mode="1" max-obj-count="30" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1380" y="360"/>
+	<column name="id" not-null="true">
+		<type name="char" length="36"/>
+	</column>
+	<column name="correlative" not-null="true">
+		<type name="char" length="10"/>
+	</column>
+	<column name="date_tax" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="folio_serie" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="folio_number" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="currency" not-null="true">
+		<type name="public.currencies" length="0"/>
+	</column>
+	<column name="xrate" not-null="true">
+		<type name="decimal" length="6" precision="3"/>
+	</column>
+	<column name="price_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="price_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="oth_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="oth_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="total_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="total_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="tax_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="icm_tax_rate_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="icm_tax_rate_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="icm_tax_fc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="icm_tax_sc" not-null="true">
+		<type name="decimal" length="14" precision="2"/>
+	</column>
+	<column name="section76_flag" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="folio_type" index="5"/>
+		<object name="partner" index="4"/>
+		<object name="period_tax" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="fk_folio_type" index="1"/>
+		<object name="fk_partner" index="2"/>
+		<object name="fk_period_tax" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="fgnprch_belongs_period" type="rel1n" layer="0"
+	 src-col-pattern="{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#a273f5"
+	 src-table="public.period_tax"
+	 dst-table="public.foreign_prch"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="fgnpch_has_type" type="rel1n" layer="0"
+	 src-col-pattern="{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#261e68"
+	 src-table="public.folio_type"
+	 dst-table="public.foreign_prch"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="partner_has_fgnprch" type="rel1n" layer="0"
+	 src-col-pattern="{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#b4923a"
+	 src-table="public.partner"
+	 dst-table="public.foreign_prch"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="fgnprch_has_type" type="rel1n" layer="0"
+	 src-col-pattern="prch_type"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#222266"
+	 src-table="public.fgn_srvc_type"
+	 dst-table="public.foreign_prch"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="fgnprch_has_incometype" type="rel1n" layer="0"
+	 src-col-pattern="icm_type"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="fk_{st}"
+	 custom-color="#b7c81c"
+	 src-table="public.fgn_icm_type"
+	 dst-table="public.foreign_prch"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<constraint name="fk_folio_period" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.period_tax" table="public.folio_tax">
+	<columns names="period_tax" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_folio_issuer" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.partner" table="public.folio_tax">
+	<columns names="issuer" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_folio_addressee" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.partner" table="public.folio_tax">
+	<columns names="addressee" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_modified" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.folio_tax" table="public.folio_tax">
+	<columns names="modified" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_folio_type" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.folio_type" table="public.folio_tax">
+	<columns names="folio_type" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="folio_belongs_period" type="relfk" layer="0"
+	 src-table="public.folio_tax"
+	 dst-table="public.period_tax" reference-fk="fk_folio_period"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-4.19043" y="3.60403"/>
+	</label>
+</relationship>
+
+<relationship name="folio_has_issuer" type="relfk" layer="0"
+	 src-table="public.folio_tax"
+	 dst-table="public.partner" reference-fk="fk_folio_issuer"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="8.84633" y="-130.807"/>
+	</label>
+</relationship>
+
+<relationship name="folio_has_addressee" type="relfk" layer="0"
+	 src-table="public.folio_tax"
+	 dst-table="public.partner" reference-fk="fk_folio_addressee"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-116.246" y="-110.807"/>
+	</label>
+</relationship>
+
+<relationship name="folio_is_modified" type="relfk" layer="0"
+	 src-table="public.folio_tax"
+	 dst-table="public.folio_tax" reference-fk="fk_modified"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="635.866" y="690.733"/>
+	<position x="635.866" y="437"/>
+	<position x="515.244" y="437"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="-36.5944" y="18.85"/>
+	</label>
+</relationship>
+
+<relationship name="folio_has_type" type="relfk" layer="0"
+	 src-table="public.folio_tax"
+	 dst-table="public.folio_type" reference-fk="fk_folio_type"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="30.3385" y="15.5018"/>
+	</label>
+</relationship>
+
+</dbmodel>

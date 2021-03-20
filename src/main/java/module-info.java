@@ -12,4 +12,7 @@ module tedora {
 
     //Reactor
     requires reactor.core;
+
+    //Exports directive
+    exports org.vericar.tedora.model;
 }
